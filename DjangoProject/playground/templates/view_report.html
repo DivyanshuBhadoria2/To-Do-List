@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Tasks</h1>
+<form method="GET" action="{% url 'view_report' %}">
+    <div class="form-group">
+        <label for="due_date">Filter by Due Date:</label> <br>
+        <label for="due_date">Start Date:</label>
+        <input type="date" id="start_due_date" name="start_due_date">
+        <label for="due_date">End Date:</label>
+        <input type="date" id="end_due_date" name="end_due_date">
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </div>
+</form> <br>
+<h4>Your search has {{ queries }} responses with tasks from {{ users }} users</h4>
+<table class="table table-hover table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">User</th>
+        <th scope="col">Task</th>
+        <th scope="col">Priority</th>
+        <th scope="col">Due Date</th>
+        <th scope="col">Categories</th>
+        <th scope="col">ID</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      <tr>
+        {% if tasks %}
+        {% for task in tasks %}
+            <tr>
+                <td>{{ task.user }}</td>
+                <td>{{ task.task_description }}</td>
+                <td>{{ task.priority }}</td>
+                <td>{{ task.due_date }}</td>
+                <td>
+                    {% for category in task.categories.all %}
+                        {{ category.category_name }}
+                        {% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
+                <td><a href="{% url 'task' task.id %}">{{ task.id }}</a></td>
+                <br/>
+            </tr>
+        {% endfor %}
+    {% endif %}
+    </tr>
+</tbody>
+</table>
+{% endblock %}
